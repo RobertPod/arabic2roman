@@ -1,33 +1,29 @@
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class Arabic2Roman {
+class Arabic2Roman {
 
+    String convert(int arabic) {
+        throwExceptionWhenNumberIsNotInRange(arabic);
 
-    public String convert(int arabic) {
-        if (arabic < 1 || arabic > 3000)
-            throw (new IllegalArgumentException());
-
-
-        List<RomanLiteral> romanLiteralReversed = Arrays
-                .stream(RomanLiteral.values())
-                .sorted(Comparator.comparing(RomanLiteral::getValue).reversed())
-                .collect(Collectors.toList());
+        List<RomanLiteral> romanLiterals = RomanLiteral.getAll;
 
         String rom = "";
-        int index = 0;
-        while (arabic > 0 && index < romanLiteralReversed.size()) {
-            RomanLiteral current = romanLiteralReversed.get(index);
+        int index = romanLiterals.size() - 1;
+        while (arabic > 0 && index >= 0) {
+            RomanLiteral current = romanLiterals.get(index);
 
             if (current.getValue() <= arabic) {
                 rom = rom.concat(current.toString());
                 arabic -= current.getValue();
             } else {
-                index++;
+                index--;
             }
         }
         return rom;
+    }
+
+    private void throwExceptionWhenNumberIsNotInRange(int arabic) {
+        if (arabic < 1 || arabic > 3000)
+            throw new IllegalArgumentException(arabic + " is not in range!!");
     }
 }

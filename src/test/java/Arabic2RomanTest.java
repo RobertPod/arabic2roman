@@ -2,9 +2,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class Arabic2RomanTest {
 
@@ -26,13 +26,16 @@ class Arabic2RomanTest {
             "12,XII",
             "30,XXX",
             "32,XXXII",
-            "40,XL"})
+            "40,XL",
+            "723,DCCXXIII",
+            "3000,MMM"})
     void shouldReturnProperlyResult(int input, String expected) {
         assertThat(arabic2Roman.convert(input)).isEqualTo(expected);
     }
 
-    @Test
-    void shouldReturnExceptionWhenNumberIsNotInRange() {
-        assertThrows(IllegalArgumentException.class, () -> arabic2Roman.convert(0));
+    @ParameterizedTest
+    @ValueSource(ints = {0, 3001})
+    void shouldReturnExceptionWhenNumberIsNotInRange(int incorrectInput) {
+        assertThrows(IllegalArgumentException.class, () -> arabic2Roman.convert(incorrectInput));
     }
 }
